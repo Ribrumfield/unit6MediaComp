@@ -17,6 +17,22 @@ public class PictureTester
     beach.explore();
   }
   
+  public void testKeepOnlyBlue()
+
+   {
+    Pixel[][] pixels = this.getPixels2D();
+
+     for (Pixel[] rowArray : pixels)
+    
+    {    
+        for (Pixel pixelObj : rowArray)
+    
+        {
+            pixelObj.setRed(0);
+            pixelObj.setGreen(0);
+        }
+    }
+    }
   /** Method to test mirrorVertical */
   public static void testMirrorVertical()
   {
@@ -59,7 +75,7 @@ public class PictureTester
     // and comment out the ones you don't want
     // to run
     testZeroBlue();
-    //testKeepOnlyBlue();
+    testKeepOnlyBlue();
     //testKeepOnlyRed();
     //testKeepOnlyGreen();
     //testNegate();
