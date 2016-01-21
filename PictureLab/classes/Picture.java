@@ -176,17 +176,22 @@ public class Picture extends SimplePicture
   /** Method to create a collage of several pictures */
   public void createCollage()
   {
-    Picture flower1 = new Picture("flower1.jpg");
-    Picture flower2 = new Picture("flower2.jpg");
-    this.copy(flower1,0,0);
-    this.copy(flower2,100,0);
-    this.copy(flower1,200,0);
-    Picture flowerNoBlue = new Picture(flower2);
-    flowerNoBlue.zeroBlue();
-    this.copy(flowerNoBlue,300,0);
-    this.copy(flower1,400,0);
-    this.copy(flower2,500,0);
-    this.mirrorVertical();
+    Picture pic1 = new Picture("flower2.jpg");
+    Picture pic2 = new Picture("moon-surface.jpg");
+    this.copy(pic2,100,500);
+    this.copy(pic2,0,0);
+    //this.copy(pic1,0,0);
+    
+    Picture picNoBlue = new Picture(pic2);
+    picNoBlue.zeroBlue();
+    
+    Picture effect1 = new Picture(pic2);
+    effect1.edgeDetection(1);
+    
+    this.copy(effect1,650,0);
+    this.copy(picNoBlue,0,0);
+    this.copy(pic2,0,0);
+    //pic1.mirrorVertical();
     this.write("collage.jpg");
   }
   
@@ -229,4 +234,32 @@ public class Picture extends SimplePicture
     beach.explore();
   }
   
+  public void cropAndCopy( Picture sourcePicture, int startSourceRow, int endSourceRow, int startSourceCol, int endSourceCol,
+         int startDestRow, int startDestCol )
+  {
+    Pixel leftPixel = null;
+    Pixel rightPixel = null;
+    Pixel[][] pixels = this.getPixels2D();
+    Color rightColor = null;
+    Pixel[][] fromPixels = sourcePicture.getPixels2D();
+    Pixel[][] toPixels = this.getPixels2D();
+    Pixel fromPixel = null;
+    Pixel toPixel = null;
+    for (int fromRow = startSourceRow, toRow = endSourceRow; 
+         fromRow < fromPixels.length &&
+         toRow < toPixels.length; 
+         fromRow++, toRow++)
+    {
+      for (int fromCol = startSourceCol, toCol = endSourceCol; 
+           fromCol < fromPixels[0].length &&
+           toCol < toPixels[0].length;  
+           fromCol++, toCol++)
+      {
+        fromPixel = fromPixels[fromRow][fromCol];
+        toPixel = toPixels[toRow][toCol];
+        toPixel.setColor(fromPixel.getColor());
+      }
+    }
+    
+  }
 } // this } is the end of class Picture, put all new methods before this

@@ -23,29 +23,6 @@ public class PictureTester
     caterpillar.explore();
     caterpillar.mirrorVertical();
     caterpillar.explore();
-    
-    Pixel[][] pixels = this.getPixels2D();
-        
-    Pixel leftPixel = null;
-    
-    Pixel rightPixel = null;
-    
-    int width = pixels[0].length;
-    
-    for (int row = 0; row < pixels.length; row++)
-    
-    {
-       for (int col = 0; col < width / 2; col++)
-       {
-        
-           leftPixel = pixels[row][col];
-           
-           rightPixel = pixels[row][width ? 1 - col]:
-            
-           rightPixel.setColor(leftPixel.getColor());
-    
-       }
-    } 
   }
   
   /** Method to test mirrorTemple */
@@ -60,7 +37,7 @@ public class PictureTester
   /** Method to test the collage method */
   public static void testCollage()
   {
-    Picture canvas = new Picture("640x480.jpg");
+    Picture canvas = new Picture( 700 , 1000);
     canvas.createCollage();
     canvas.explore();
   }
@@ -81,14 +58,14 @@ public class PictureTester
     // and comment out the ones you don't want
     // to run
     testZeroBlue();
-    testKeepOnlyBlue();
+    //testKeepOnlyBlue();
     //testKeepOnlyRed();
     //testKeepOnlyGreen();
     //testNegate();
     //testGrayscale();
     //testFixUnderwater();
     //testMirrorVertical();
-    //testMirrorTemple();
+    testMirrorTemple();
     //testMirrorArms();
     //testMirrorGull();
     //testMirrorDiagonal();
