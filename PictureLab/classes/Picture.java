@@ -176,22 +176,24 @@ public class Picture extends SimplePicture
   /** Method to create a collage of several pictures */
   public void createCollage()
   {
-    Picture pic1 = new Picture("flower2.jpg");
     Picture pic2 = new Picture("moon-surface.jpg");
-    this.copy(pic2,100,500);
-    this.copy(pic2,0,0);
-    //this.copy(pic1,0,0);
     
     Picture picNoBlue = new Picture(pic2);
     picNoBlue.zeroBlue();
     
     Picture effect1 = new Picture(pic2);
-    effect1.edgeDetection(1);
+    effect1.edgeDetection(10);
     
-    this.copy(effect1,650,0);
+    Picture effect2 = new Picture(pic2);
+    
+    this.copy(effect1,250,600);
+    this.copy(pic2,0,600);
+    effect2.mirrorVertical();
+    this.copy(effect2,250,0);
+    
     this.copy(picNoBlue,0,0);
-    this.copy(pic2,0,0);
-    //pic1.mirrorVertical();
+   
+    
     this.write("collage.jpg");
   }
   
