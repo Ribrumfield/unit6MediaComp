@@ -1,0 +1,39 @@
+import javax.swing.JFrame;
+import java.awt.BorderLayout;
+
+public class LightCycle extends JFrame
+{
+    private static final int FRAME_WIDTH = 600;
+    private static final int FRAME_HIGHT = 600;
+    
+    private GamePanel game;
+    private StartPanel start;
+    
+    public LightCycle()
+    {
+        setTitle( "LightCycle");
+        this.start = new StartPanel();
+        this.game = new GamePanel();
+        loadStartPanel();
+        this.setSize( FRAME_WIDTH, FRAME_HIGHT);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setVisible(true);
+    }
+    
+    public void loadGamePanel()
+    {
+        this.add(game,BorderLayout.CENTER);  
+        this.pack();
+    }
+    
+    public void loadStartPanel()
+    {
+        this.add(start,BorderLayout.CENTER);
+        this.pack();
+    }
+    
+    public static void main(String [] args)
+    {
+        LightCycle prog = new LightCycle();
+    }
+}
