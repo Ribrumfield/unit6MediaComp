@@ -1,7 +1,7 @@
 import javax.swing.JFrame;
 import java.awt.BorderLayout;
 
-public class LightCycle extends JFrame
+public class LightCycle extends JFrame implements Communication
 {
     private static final int FRAME_WIDTH = 600;
     private static final int FRAME_HIGHT = 600;
@@ -12,7 +12,7 @@ public class LightCycle extends JFrame
     public LightCycle()
     {
         setTitle( "LightCycle");
-        this.start = new StartPanel();
+        this.start = new StartPanel(this);
         this.game = new GamePanel();
         loadStartPanel();
         this.setSize( FRAME_WIDTH, FRAME_HIGHT);
@@ -35,5 +35,10 @@ public class LightCycle extends JFrame
     public static void main(String [] args)
     {
         LightCycle prog = new LightCycle();
+    }
+    
+    public void start()
+    {
+        loadGamePanel();
     }
 }
