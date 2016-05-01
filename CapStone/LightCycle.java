@@ -13,7 +13,7 @@ public class LightCycle extends JFrame implements Communication
     {
         setTitle( "LightCycle");
         this.start = new StartPanel(this);
-        this.game = new GamePanel();
+        this.game = new GamePanel(this);
         loadStartPanel();
         this.setSize( FRAME_WIDTH, FRAME_HIGHT);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -22,13 +22,15 @@ public class LightCycle extends JFrame implements Communication
     
     public void loadGamePanel()
     {
-        this.add(game,BorderLayout.CENTER);  
+        this.getContentPane().removeAll();
+        this.getContentPane().add(game,BorderLayout.CENTER);  
         this.pack();
     }
     
     public void loadStartPanel()
     {
-        this.add(start,BorderLayout.CENTER);
+        this.getContentPane().removeAll();
+        this.getContentPane().add(start,BorderLayout.CENTER);
         this.pack();
     }
     
@@ -40,5 +42,10 @@ public class LightCycle extends JFrame implements Communication
     public void start()
     {
         loadGamePanel();
+    }
+    
+    public void stop()
+    {
+        loadStartPanel();
     }
 }

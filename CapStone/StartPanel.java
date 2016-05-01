@@ -10,7 +10,7 @@ import javax.swing.JComboBox;
 import javax.swing.JCheckBox;
 import java.awt.BorderLayout;
 
-public class StartPanel extends JPanel
+public class StartPanel extends BasePanel
 {
    private Communication communication;
    public StartPanel(Communication communication)
@@ -42,42 +42,18 @@ public class StartPanel extends JPanel
        
        top.setPreferredSize(new Dimension(600,100));
        JPanel bottom = new JPanel();
-       bottom.add(button("start","START",80));
+       JButton startbutton = button("start","START",80);
+       startbutton.addActionListener(new StartAction());
+       bottom.add(startbutton);
        add(bottom,BorderLayout.SOUTH);
        add(top,BorderLayout.NORTH);
    }
-   public JLabel label(String text,int w)
+   
+   public class StartAction implements ActionListener
    {
-       JLabel label = new JLabel(text);
-       label.setPreferredSize(new Dimension(w,20));
-       return label;
+       public void actionPerformed(ActionEvent e)
+       {
+           communication.start();
+       }
    }
-   public JTextField field(String name,String text,int w)
-   {
-       JTextField field = new JTextField(text);
-       field.setPreferredSize(new Dimension(w,20));
-       field.setName(name);
-       return field;
-   }
-   public JComboBox box(String name,String [] text,int w)
-   {
-       JComboBox box = new JComboBox(text);
-       box.setPreferredSize(new Dimension(w,20));
-       box.setName(name);
-       return box;
-   }
-   public JCheckBox check(String name,String text,int w)
-   {
-       JCheckBox check = new JCheckBox(text);
-       check.setPreferredSize(new Dimension(w,20));
-       check.setName(name);
-       return check;
-   }
-   public JButton button(String name,String text, int w)
-   {
-       JButton button = new JButton(text);
-       button.setPreferredSize(new Dimension(w,20));
-       button.setName(name);
-       return button;
-    }
 }
