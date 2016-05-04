@@ -20,6 +20,8 @@ public class StartPanel extends BasePanel
        setLayout(new BorderLayout());
        top.setLayout(new GridLayout(0,4));
        
+       //top.add(label("LIGHT CYCLE",80));
+       
        top.add(check("player1check","",20));
        top.add(field("player1field","",200));
        top.add(box("player1box",new String[] {"Human","AI"},80));

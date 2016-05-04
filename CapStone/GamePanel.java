@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import javax.swing.JLabel;
 import java.awt.GridLayout;
 import javax.swing.JButton;
+import java.util.TimerTask;
 
 public class GamePanel extends BasePanel
 {
@@ -23,18 +24,21 @@ public class GamePanel extends BasePanel
         add(bottom,BorderLayout.SOUTH);
         add(panel,BorderLayout.CENTER);
     }
+    
     private void start()
     {
         Cycle cycle1 = new Cycle();
         Cycle cycle2 = new Cycle();
     }
-    public class task implements Runnable
+    
+    public class task extends TimerTask
     {
         public void run()
         {
-            
+            //use timmers see example on canvas   
         }
     }
+    
     public class DisplayPanel extends JPanel
     {
         public DisplayPanel()
@@ -42,6 +46,7 @@ public class GamePanel extends BasePanel
             setPreferredSize(new Dimension(600,400));
         }
     }
+    
     public class StopAction implements ActionListener
     {
         public void actionPerformed(ActionEvent e)

@@ -8,6 +8,11 @@ public class Cycle
     private int lastY = 0;
     private int dir = 0;
     
+    public void drawBikes(Graphics g1)
+    {
+        g1.drawRect(10,10,200,200);
+    }
+    
     public void move(Graphics g, int X, int Y)
     {
         Graphics2D g2 = (Graphics2D) g;
@@ -16,6 +21,7 @@ public class Cycle
         g2.setColor(Color.white);
         g2.fill3DRect(lastX,lastY,X-lastX,40,true);
     }
+    
     public void move()
     {
         //get next X and Y pos
