@@ -8,9 +8,9 @@ public class Cycle
     private int lastY = 0;
     private int dir = 0;
     
-    public void drawBikes(Graphics g1)
+    public void drawBikes(Graphics g1 ,int startX, int startY)
     {
-        g1.drawRect(10,10,200,200);
+        //g1.drawRect(10,10,200,200);
     }
     
     public void move(Graphics g, int X, int Y)
@@ -26,5 +26,5 @@ public class Cycle
     {
         //get next X and Y pos
         //call move method with next X and Y pos
-    }   
+    } 
 }

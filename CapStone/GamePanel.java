@@ -1,3 +1,4 @@
+// https://docs.oracle.com/javase/7/docs/api/java/util/TimerTask.html
 import javax.swing.JPanel;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -7,6 +8,7 @@ import javax.swing.JLabel;
 import java.awt.GridLayout;
 import javax.swing.JButton;
 import java.util.TimerTask;
+import java.util.Timer;
 
 public class GamePanel extends BasePanel
 {
@@ -29,13 +31,15 @@ public class GamePanel extends BasePanel
     {
         Cycle cycle1 = new Cycle();
         Cycle cycle2 = new Cycle();
-    }
+    }    
     
     public class task extends TimerTask
     {
         public void run()
         {
-            //use timmers see example on canvas   
+            //use timmers see example on canvas
+            Timer timer = new Timer();
+            timer.schedule(new TimerTask());
         }
     }
     
