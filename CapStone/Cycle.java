@@ -1,6 +1,9 @@
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Color;
+import java.awt.event.KeyListener;
+import java.awt.event.KeyEvent;
+import javax.swing.KeyStroke;
 
 public class Cycle
 {
@@ -57,4 +60,31 @@ public class Cycle
         lastX = x;
         lastY = y;
     } 
+    
+    class KeyStrokeListener implements KeyListener
+    {
+        public void keyPressed(KeyEvent event) 
+        {
+            String key = KeyStroke.getKeyStrokeForEvent(event).toString().replace("pressed ", ""); 
+            if (key.equals("DOWN"))
+            {
+                dir = DOWN;           
+            }
+            else if (key.equals("UP"))
+            {
+                dir = UP;           
+            }
+            else if (key.equals("LEFT"))
+            {
+                dir = LEFT;           
+            }
+            else if (key.equals("RIGHT"))
+            {
+                dir = RIGHT;         
+            }
+        }
+
+        public void keyTyped(KeyEvent event) {}
+        public void keyReleased(KeyEvent event) {}
+    }
 }
