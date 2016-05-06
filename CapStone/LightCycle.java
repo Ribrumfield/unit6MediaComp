@@ -42,6 +42,7 @@ public class LightCycle extends JFrame implements Communication
     public void start()
     {
         loadGamePanel();
+        game.start();
     }
     
     public void stop()

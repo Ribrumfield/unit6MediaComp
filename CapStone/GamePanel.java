@@ -9,10 +9,18 @@ import java.awt.GridLayout;
 import javax.swing.JButton;
 import java.util.TimerTask;
 import java.util.Timer;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+import java.util.List;
+import java.util.ArrayList;
+import java.awt.Graphics;
 
 public class GamePanel extends BasePanel
 {
-    private DisplayPanel panel = new DisplayPanel();
+    private List<Cycle> cycles = new ArrayList<>();
+    final ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
+    private DisplayPanel panel = new DisplayPanel(cycles);
     private Communication communication;
     public GamePanel(Communication communication)
     {
@@ -27,27 +35,44 @@ public class GamePanel extends BasePanel
         add(panel,BorderLayout.CENTER);
     }
     
-    private void start()
+    public void start()
     {
-        Cycle cycle1 = new Cycle();
-        Cycle cycle2 = new Cycle();
+       Cycle cycle1 = new Cycle(Cycle.RIGHT,300,300);
+       Cycle cycle2 = new Cycle(Cycle.LEFT,300,300);
+       cycles.add(cycle1);
+       cycles.add(cycle2);
+       service.scheduleWithFixedDelay(new Task(), 0, 500, TimeUnit.MILLISECONDS );
+       // timer.schedule(new Task());
     }    
     
-    public class task extends TimerTask
+    public class Task implements Runnable
     {
         public void run()
         {
             //use timmers see example on canvas
-            Timer timer = new Timer();
-            timer.schedule(new TimerTask());
+            panel.repaint();
+            System.out.println("Running");
         }
     }
     
     public class DisplayPanel extends JPanel
     {
-        public DisplayPanel()
+        private List<Cycle> cycles;
+        public DisplayPanel(List<Cycle> cycles)
         {
+            this.cycles = cycles;
             setPreferredSize(new Dimension(600,400));
+            setLayout(null);
+        }
+        public void paint(Graphics g)
+        {
+            super.paint(g);
+            for(Cycle cycle : cycles)
+            {
+               // int x = (int)(300 * Math.random());
+               // int y = (int)(300 * Math.random());
+                cycle.move(g);
+            }
         }
     }
     
