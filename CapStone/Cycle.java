@@ -60,8 +60,34 @@ public class Cycle
         lastX = x;
         lastY = y;
     } 
-    
-    class KeyStrokeListener implements KeyListener
+    // FOR THE KEYLISTENERS https://docs.oracle.com/javase/tutorial/displayCode.html?code=https://docs.oracle.com/javase/tutorial/uiswing/examples/events/KeyEventDemoProject/src/events/KeyEventDemo.java
+    class KeyStrokeListenerWSAD implements KeyListener
+    {
+        public void keyPressed(KeyEvent event) 
+        {
+            String key = KeyStroke.getKeyStrokeForEvent(event).toString().replace("pressed ", ""); 
+            if (key.equals("S"))
+            {
+                dir = DOWN;           
+            }
+            else if (key.equals("W"))
+            {
+                dir = UP;           
+            }
+            else if (key.equals("A"))
+            {
+                dir = LEFT;           
+            }
+            else if (key.equals("D"))
+            {
+                dir = RIGHT;         
+            }
+        }
+
+        public void keyTyped(KeyEvent event) {}
+        public void keyReleased(KeyEvent event) {}
+    }
+    class KeyStrokeListenerARROWS implements KeyListener
     {
         public void keyPressed(KeyEvent event) 
         {

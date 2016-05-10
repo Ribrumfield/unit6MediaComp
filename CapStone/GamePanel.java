@@ -1,4 +1,4 @@
-// https://docs.oracle.com/javase/7/docs/api/java/util/TimerTask.html
+//FOR TIMMER TASK https://docs.oracle.com/javase/7/docs/api/java/util/TimerTask.html
 import javax.swing.JPanel;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -71,7 +71,7 @@ public class GamePanel extends BasePanel
             {
                // int x = (int)(300 * Math.random());
                // int y = (int)(300 * Math.random());
-                cycle.move(g);
+               cycle.move(g);
             }
         }
     }
