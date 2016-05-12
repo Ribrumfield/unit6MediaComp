@@ -15,6 +15,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.List;
 import java.util.ArrayList;
 import java.awt.Graphics;
+import java.awt.Color;
 
 public class GamePanel extends BasePanel
 {
@@ -37,8 +38,8 @@ public class GamePanel extends BasePanel
     
     public void start()
     {
-       Cycle cycle1 = new Cycle(Cycle.RIGHT,300,300);
-       Cycle cycle2 = new Cycle(Cycle.LEFT,300,300);
+       Cycle cycle1 = new Cycle(Cycle.RIGHT,300,300,Color.red);
+       Cycle cycle2 = new Cycle(Cycle.LEFT,300,300,Color.blue);
        cycles.add(cycle1);
        cycles.add(cycle2);
        service.scheduleWithFixedDelay(new Task(), 0, 500, TimeUnit.MILLISECONDS );
@@ -67,11 +68,18 @@ public class GamePanel extends BasePanel
         public void paint(Graphics g)
         {
             super.paint(g);
+           // int i = 2;
             for(Cycle cycle : cycles)
             {
                // int x = (int)(300 * Math.random());
                // int y = (int)(300 * Math.random());
+
+               //int dir = 1+ i;
+              // cycle.setDirection(dir);
+                cycle.move(g);
+
                cycle.move(g);
+
             }
         }
     }

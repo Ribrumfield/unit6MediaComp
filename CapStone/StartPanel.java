@@ -1,4 +1,4 @@
-// FOR COMBOBOXES http://stackoverflow.com/questions/23022532/how-to-check-if-a-selected-item-from-an-editable-combobox-is-empty
+/// FOR COMBOBOXES http://stackoverflow.com/questions/23022532/how-to-check-if-a-selected-item-from-an-editable-combobox-is-empty
 import javax.swing.JPanel;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
@@ -25,43 +25,24 @@ public class StartPanel extends BasePanel
        
        top.add(check("player1check","",20));
        top.add(field("player1field","",200));
-       JComboBox player1box = ((box("player1box",new String[] {"NONE","Human","AI"},80)));
-       top.add(player1box);
-       String x1 = (String)player1box.getSelectedItem();
-       if(x1 == "Human")
-       {
-           top.add(box("layout1",new String[] {"WASD","AROWS"},80));
-       }
+       top.add(box("player1box",new String[] {"NONE","Human","AI"},80));
+       top.add(box("layout1",new String[] {"WASD","AROWS"},80));
+      
        
        top.add(check("player2check","",20));
        top.add(field("player2field","",200));
-       JComboBox player2box = ((box("player2box",new String[] {"NONE","Human","AI"},80)));
-       top.add(player2box);
-       String x2 = (String)player2box.getSelectedItem();
-       if(x2 == "Human")
-       {
-           top.add(box("layout2",new String[] {"WASD","AROWS"},80));
-       }
+       top.add(box("player2box",new String[] {"NONE","Human","AI"},80));
+       top.add(box("layout2",new String[] {"WASD","AROWS"},80));
        
        top.add(check("player3check","",20));
        top.add(field("player3field","",200));
-       JComboBox player3box = ((box("player3box",new String[] {"NONE","Human","AI"},80)));
-       top.add(player3box);
-       String x3 = (String)player3box.getSelectedItem();
-       if(x3 == "Human")
-       {
-           top.add(box("layout3",new String[] {"WASD","AROWS"},80));
-       }
+      top.add(box("player3box",new String[] {"NONE","Human","AI"},80));
+      top.add(box("layout3",new String[] {"WASD","AROWS"},80));
        
        top.add(check("player4check","",20));
        top.add(field("player4field","",200));
-       JComboBox player4box = ((box("player4box",new String[] {"NONE","Human","AI"},80)));
-       top.add(player4box);
-       String x4 = (String)player4box.getSelectedItem();
-       if(x4 == "Human")
-       {
-           top.add(box("layout4",new String[] {"WASD","AROWS"},80));
-       }
+       top.add(box("player4box",new String[] {"NONE","Human","AI"},80));
+       top.add(box("layout4",new String[] {"WASD","AROWS"},80));
        
        top.setPreferredSize(new Dimension(600,100));
        JPanel bottom = new JPanel();
