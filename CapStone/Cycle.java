@@ -1,9 +1,7 @@
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Color;
-
 import java.util.ArrayList;
-
 import java.awt.event.KeyListener;
 import java.awt.event.KeyEvent;
 import javax.swing.KeyStroke;
@@ -25,7 +23,8 @@ public class Cycle
     private int y = 0;
     private Color color = Color.black;
     private ArrayList<int[]> trails = new ArrayList<int[]>();
-
+    private boolean hasCrashed = false;
+    
     public Cycle(int dir, int x , int y, Color color)
     {
         this.dir = dir;
@@ -114,6 +113,10 @@ public class Cycle
     {
         //get next X and Y pos
         //call move method with next X and Y pos
+        if(hasCrashed)
+        {
+            return;
+        }
         switch(dir)
         {
             case UP: y = y - VELOCITY;
@@ -135,60 +138,13 @@ public class Cycle
     {
         this.dir = dir;
         trails.add(new int[]{x,y,dir});
-
     } 
-    // FOR THE KEYLISTENERS https://docs.oracle.com/javase/tutorial/displayCode.html?code=https://docs.oracle.com/javase/tutorial/uiswing/examples/events/KeyEventDemoProject/src/events/KeyEventDemo.java
-    class KeyStrokeListenerWSAD implements KeyListener
+    public boolean hasCrashed()
     {
-        public void keyPressed(KeyEvent event) 
-        {
-            String key = KeyStroke.getKeyStrokeForEvent(event).toString().replace("pressed ", ""); 
-            if (key.equals("S"))
-            {
-                dir = DOWN;           
-            }
-            else if (key.equals("W"))
-            {
-                dir = UP;           
-            }
-            else if (key.equals("A"))
-            {
-                dir = LEFT;           
-            }
-            else if (key.equals("D"))
-            {
-                dir = RIGHT;         
-            }
-        }
-
-        public void keyTyped(KeyEvent event) {}
-        public void keyReleased(KeyEvent event) {}
+        return hasCrashed;
     }
-    class KeyStrokeListenerARROWS implements KeyListener
+    public void setCrashed()
     {
-        public void keyPressed(KeyEvent event) 
-        {
-            String key = KeyStroke.getKeyStrokeForEvent(event).toString().replace("pressed ", ""); 
-            if (key.equals("DOWN"))
-            {
-                dir = DOWN;           
-            }
-            else if (key.equals("UP"))
-            {
-                dir = UP;           
-            }
-            else if (key.equals("LEFT"))
-            {
-                dir = LEFT;           
-            }
-            else if (key.equals("RIGHT"))
-            {
-                dir = RIGHT;         
-            }
-        }
-
-        public void keyTyped(KeyEvent event) {}
-        public void keyReleased(KeyEvent event) {}
-
+        hasCrashed = true;
     }
 }

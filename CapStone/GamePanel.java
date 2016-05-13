@@ -16,6 +16,10 @@ import java.util.List;
 import java.util.ArrayList;
 import java.awt.Graphics;
 import java.awt.Color;
+import java.awt.event.KeyListener;
+import java.awt.event.KeyEvent;
+import javax.swing.KeyStroke;
+
 
 public class GamePanel extends BasePanel
 {
@@ -34,6 +38,11 @@ public class GamePanel extends BasePanel
         bottom.add(stopbutton);
         add(bottom,BorderLayout.SOUTH);
         add(panel,BorderLayout.CENTER);
+        KeyStrokeListenerWSAD  listener1 =  new KeyStrokeListenerWSAD ();
+       KeyStrokeListenerARROWS listener2 = new KeyStrokeListenerARROWS();
+       panel.setFocusable(true);
+       panel.addKeyListener(listener1);
+       panel.addKeyListener(listener2);
     }
     
     public void start()
@@ -42,17 +51,63 @@ public class GamePanel extends BasePanel
        Cycle cycle2 = new Cycle(Cycle.LEFT,300,300,Color.blue);
        cycles.add(cycle1);
        cycles.add(cycle2);
-       service.scheduleWithFixedDelay(new Task(), 0, 500, TimeUnit.MILLISECONDS );
+       service.scheduleWithFixedDelay(new MovementTask(), 0, 500, TimeUnit.MILLISECONDS );
+       service.scheduleWithFixedDelay(new MonitorTask(cycles), 0, 500, TimeUnit.MILLISECONDS );
+       service.scheduleWithFixedDelay(new AITask(cycles), 0, 500, TimeUnit.MILLISECONDS );
+       
        // timer.schedule(new Task());
     }    
     
-    public class Task implements Runnable
+    public class MovementTask implements Runnable
     {
         public void run()
         {
             //use timmers see example on canvas
             panel.repaint();
-            System.out.println("Running");
+            //System.out.println("Running");
+        }
+    }
+    
+    public class MonitorTask implements Runnable
+    {
+        private List<Cycle> cycles;
+        public MonitorTask(List<Cycle> cycles)
+        {
+            this.cycles = cycles;
+        }
+        public void run()
+        {
+            for(Cycle cycle: cycles)
+            {
+                if(false)
+                {
+                    cycle.setCrashed();
+                }
+            }
+        }
+    }
+    
+    public class AITask implements Runnable
+    {
+        private List<Cycle> cycles;
+        public AITask(List<Cycle> cycles)
+        {
+            this.cycles = cycles;
+        }
+        public int getDirection(Cycle cycle)
+        {
+            return 1;
+        }
+        public void run()
+        {
+            for(Cycle cycle: cycles)
+            {
+                int dir = getDirection(cycle);
+                if(false)
+                {
+                    cycle.setDirection(dir);
+                }
+            }
         }
     }
     
@@ -90,5 +145,71 @@ public class GamePanel extends BasePanel
         {
             communication.stop();
         }
+    }
+    
+     // FOR THE KEYLISTENERS https://docs.oracle.com/javase/tutorial/displayCode.html?code=https://docs.oracle.com/javase/tutorial/uiswing/examples/events/KeyEventDemoProject/src/events/KeyEventDemo.java
+    class KeyStrokeListenerWSAD implements KeyListener
+    {
+        public void keyPressed(KeyEvent event) 
+        {
+            int dir = 0;
+            String key = KeyStroke.getKeyStrokeForEvent(event).toString().replace("pressed ", ""); 
+            if (key.equals("S"))
+            {
+                dir = Cycle.DOWN;           
+            }
+            else if (key.equals("W"))
+            {
+                dir = Cycle.UP;           
+            }
+            else if (key.equals("A"))
+            {
+                dir = Cycle.LEFT;           
+            }
+            else if (key.equals("D"))
+            {
+                dir = Cycle.RIGHT;         
+            }
+           // cycles.get(0).setDirection(dir);
+            System.out.println(dir);
+        }
+
+        public void keyTyped(KeyEvent event) {}
+        public void keyReleased(KeyEvent event) {}
+    }
+    class KeyStrokeListenerARROWS implements KeyListener
+    {
+        public KeyStrokeListenerARROWS()
+        {
+            System.out.println("Constructor");
+        }
+        public void keyPressed(KeyEvent event) 
+        {
+            int dir = 0;
+            System.out.println("key pressed");
+            String key = KeyStroke.getKeyStrokeForEvent(event).toString().replace("pressed ", ""); 
+            if (key.equals("DOWN"))
+            {
+                dir = Cycle.DOWN;           
+            }
+            else if (key.equals("UP"))
+            {
+                dir = Cycle.UP;           
+            }
+            else if (key.equals("LEFT"))
+            {
+                dir = Cycle.LEFT;           
+            }
+            else if (key.equals("RIGHT"))
+            {
+                dir = Cycle.RIGHT;         
+            }
+            //cycles.get(1).setDirection(dir);
+             System.out.println(dir);
+        }
+
+        public void keyTyped(KeyEvent event) {}
+        public void keyReleased(KeyEvent event) {}
+
     }
 }

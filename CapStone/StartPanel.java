@@ -1,4 +1,4 @@
-/// FOR COMBOBOXES http://stackoverflow.com/questions/23022532/how-to-check-if-a-selected-item-from-an-editable-combobox-is-empty
+// FOR COMBOBOXES http://stackoverflow.com/questions/23022532/how-to-check-if-a-selected-item-from-an-editable-combobox-is-empty
 import javax.swing.JPanel;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
