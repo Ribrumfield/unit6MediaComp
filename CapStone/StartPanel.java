@@ -1,18 +1,18 @@
 // FOR COMBOBOXES http://stackoverflow.com/questions/23022532/how-to-check-if-a-selected-item-from-an-editable-combobox-is-empty
-import javax.swing.JPanel;
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.awt.GridLayout;
-import javax.swing.JLabel;
-import java.awt.Dimension;
-import javax.swing.JTextField;
-import javax.swing.JComboBox;
-import javax.swing.JCheckBox;
+ 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JButton;
+import javax.swing.JPanel;
 
 public class StartPanel extends BasePanel
 {
+   private List<String> setup = new ArrayList<String>();
    private Communication communication;
    public StartPanel(Communication communication)
    {
@@ -26,23 +26,23 @@ public class StartPanel extends BasePanel
        top.add(check("player1check","",20));
        top.add(field("player1field","",200));
        top.add(box("player1box",new String[] {"NONE","Human","AI"},80));
-       top.add(box("layout1",new String[] {"WASD","AROWS"},80));
+       top.add(box("player1layout",new String[] {"WASD","AROWS"},80));
       
        
        top.add(check("player2check","",20));
        top.add(field("player2field","",200));
        top.add(box("player2box",new String[] {"NONE","Human","AI"},80));
-       top.add(box("layout2",new String[] {"WASD","AROWS"},80));
+       top.add(box("player2layout",new String[] {"WASD","ARROWS"},80));
        
        top.add(check("player3check","",20));
        top.add(field("player3field","",200));
-      top.add(box("player3box",new String[] {"NONE","Human","AI"},80));
-      top.add(box("layout3",new String[] {"WASD","AROWS"},80));
+       top.add(box("player3box",new String[] {"NONE","AI"},80));
+       top.add(label(" ", 80 ) );
        
        top.add(check("player4check","",20));
        top.add(field("player4field","",200));
-       top.add(box("player4box",new String[] {"NONE","Human","AI"},80));
-       top.add(box("layout4",new String[] {"WASD","AROWS"},80));
+       top.add(box("player4box",new String[] {"NONE","AI"},80));
+       top.add(label(" ", 80 ) );
        
        top.setPreferredSize(new Dimension(600,100));
        JPanel bottom = new JPanel();
@@ -53,11 +53,23 @@ public class StartPanel extends BasePanel
        add(top,BorderLayout.NORTH);
    }
    
+   private void setup() {
+       setup.clear();
+       for( int n = 1; n <= 4; n++ ) {
+            if ( text("player"+n+"check").startsWith("true") && !text("player"+n+"box").startsWith("NONE")) {
+                setup.add( text("player"+n+"field")+","+text("player"+n+"box")+","+text("player"+n+"layout"));
+            }
+       }
+   }
    public class StartAction implements ActionListener
    {
+       @Override
        public void actionPerformed(ActionEvent e)
        {
-           communication.start();
+           setup();
+           if ( !setup.isEmpty() ) { 
+                communication.start( setup );
+           }
        }
    }
 }

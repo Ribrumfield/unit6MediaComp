@@ -1,5 +1,7 @@
+ 
 import javax.swing.JFrame;
 import java.awt.BorderLayout;
+import java.util.List;
 
 public class LightCycle extends JFrame implements Communication
 {
@@ -39,10 +41,10 @@ public class LightCycle extends JFrame implements Communication
         LightCycle prog = new LightCycle();
     }
     
-    public void start()
+    public void start(List<String> setup )
     {
         loadGamePanel();
-        game.start();
+        game.start( setup );
     }
     
     public void stop()

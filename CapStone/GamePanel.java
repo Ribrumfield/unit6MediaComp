@@ -1,35 +1,40 @@
 //FOR TIMMER TASK https://docs.oracle.com/javase/7/docs/api/java/util/TimerTask.html
-import javax.swing.JPanel;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
+ 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
-import javax.swing.JLabel;
-import java.awt.GridLayout;
-import javax.swing.JButton;
-import java.util.TimerTask;
-import java.util.Timer;
+import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import java.util.List;
-import java.util.ArrayList;
-import java.awt.Graphics;
-import java.awt.Color;
-import java.awt.event.KeyListener;
-import java.awt.event.KeyEvent;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 
 
 public class GamePanel extends BasePanel
 {
-    private List<Cycle> cycles = new ArrayList<>();
-    final ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
+    private List<Cycle> cycles = new ArrayList<Cycle>();
+    private KeyStrokeListenerWSAD  listenerWASD =  new KeyStrokeListenerWSAD ();
+    private KeyStrokeListenerARROWS listenerARROWS = new KeyStrokeListenerARROWS();
+    private ScheduledExecutorService service;
     private DisplayPanel panel = new DisplayPanel(cycles);
     private Communication communication;
+    protected final Boolean lock = Boolean.TRUE;
+    
     public GamePanel(Communication communication)
     {
         this.communication = communication;
+        panel.setFocusable( true );
+        panel.addKeyListener(listenerWASD);
+        panel.addKeyListener(listenerARROWS);
         setLayout(new BorderLayout());
         JPanel bottom = new JPanel();
 
@@ -38,33 +43,46 @@ public class GamePanel extends BasePanel
         bottom.add(stopbutton);
         add(bottom,BorderLayout.SOUTH);
         add(panel,BorderLayout.CENTER);
-        KeyStrokeListenerWSAD  listener1 =  new KeyStrokeListenerWSAD ();
-       KeyStrokeListenerARROWS listener2 = new KeyStrokeListenerARROWS();
-       panel.setFocusable(true);
-       panel.addKeyListener(listener1);
-       panel.addKeyListener(listener2);
-    }
+     }
     
-    public void start()
+    public void start( List<String> setup)
     {
-       Cycle cycle1 = new Cycle(Cycle.RIGHT,300,300,Color.red);
-       Cycle cycle2 = new Cycle(Cycle.LEFT,300,300,Color.blue);
-       cycles.add(cycle1);
-       cycles.add(cycle2);
-       service.scheduleWithFixedDelay(new MovementTask(), 0, 500, TimeUnit.MILLISECONDS );
-       service.scheduleWithFixedDelay(new MonitorTask(cycles), 0, 500, TimeUnit.MILLISECONDS );
-       service.scheduleWithFixedDelay(new AITask(cycles), 0, 500, TimeUnit.MILLISECONDS );
+       service = Executors.newSingleThreadScheduledExecutor();
+       cycles.clear();
+       int dir = Cycle.UP;
+       Color[] colors = {Color.red, Color.blue,Color.green,Color.cyan};
+       for( String entry : setup ) {
+           Cycle cycle;
+           String[] split = entry.split( "," );
+           if ( split[1].startsWith( "Human" ) ) {
+                cycle = new Cycle( lock, false, dir, DisplayPanel.DISPLAY_WIDTH/2,DisplayPanel.DISPLAY_HEIGHT/2, colors[dir-1]);
+                if (split[2].startsWith("WSAD")){
+                    listenerWASD.setCycleIndex( dir-1);
+                }
+                else {
+                    listenerARROWS.setCycleIndex( dir-1 );
+                }
+           }
+           else{
+                cycle = new Cycle( lock, true, dir, DisplayPanel.DISPLAY_WIDTH/2,DisplayPanel.DISPLAY_HEIGHT/2, colors[dir-1]);
+           }
+           cycles.add(cycle);
+           dir++;
+       }
        
-       // timer.schedule(new Task());
+       service.scheduleWithFixedDelay(new MovementTask(), 0, 200, TimeUnit.MILLISECONDS );
+       service.scheduleWithFixedDelay(new MonitorTask(cycles), 1000, 200, TimeUnit.MILLISECONDS );
+       service.scheduleWithFixedDelay(new AITask(cycles), 10000, 10000, TimeUnit.MILLISECONDS );
+       panel.requestFocusInWindow();
+      
     }    
     
     public class MovementTask implements Runnable
     {
+        @Override
         public void run()
         {
-            //use timmers see example on canvas
             panel.repaint();
-            //System.out.println("Running");
         }
     }
     
@@ -75,15 +93,21 @@ public class GamePanel extends BasePanel
         {
             this.cycles = cycles;
         }
+        @Override
         public void run()
         {
             for(Cycle cycle: cycles)
             {
-                if(false)
+                boolean atEnd = cycle.getX() <= 0 || cycle.getX() >= DisplayPanel.DISPLAY_WIDTH || cycle.getY()<= 0 || cycle.getY() >= DisplayPanel.DISPLAY_HEIGHT;
+                if( !cycle.hasCrashed() && ( atEnd || isCollision( cycle ) ) )
                 {
                     cycle.setCrashed();
                 }
             }
+        }
+        
+        public boolean isCollision( Cycle cycle )  {
+            return false;
         }
     }
     
@@ -95,15 +119,18 @@ public class GamePanel extends BasePanel
             this.cycles = cycles;
         }
         public int getDirection(Cycle cycle)
-        {
-            return 1;
+        {    
+            int dir = cycle.getDirection() + 1;
+            if ( dir < 1 || dir > 4) dir = 1;
+            return dir;
         }
+        @Override
         public void run()
         {
             for(Cycle cycle: cycles)
             {
                 int dir = getDirection(cycle);
-                if(false)
+                if( cycle.isAI())
                 {
                     cycle.setDirection(dir);
                 }
@@ -113,26 +140,22 @@ public class GamePanel extends BasePanel
     
     public class DisplayPanel extends JPanel
     {
+        public static final int DISPLAY_WIDTH = 1000;
+        public static final int DISPLAY_HEIGHT = 600;
         private List<Cycle> cycles;
         public DisplayPanel(List<Cycle> cycles)
         {
             this.cycles = cycles;
-            setPreferredSize(new Dimension(600,400));
+            setPreferredSize(new Dimension(DISPLAY_WIDTH,DISPLAY_HEIGHT));
             setLayout(null);
+            setBorder( BorderFactory.createBevelBorder( 1 ));
         }
+        @Override
         public void paint(Graphics g)
         {
             super.paint(g);
-           // int i = 2;
             for(Cycle cycle : cycles)
             {
-               // int x = (int)(300 * Math.random());
-               // int y = (int)(300 * Math.random());
-
-               //int dir = 1+ i;
-              // cycle.setDirection(dir);
-                cycle.move(g);
-
                cycle.move(g);
 
             }
@@ -141,8 +164,10 @@ public class GamePanel extends BasePanel
     
     public class StopAction implements ActionListener
     {
+        @Override
         public void actionPerformed(ActionEvent e)
         {
+            service.shutdownNow();
             communication.stop();
         }
     }
@@ -150,6 +175,8 @@ public class GamePanel extends BasePanel
      // FOR THE KEYLISTENERS https://docs.oracle.com/javase/tutorial/displayCode.html?code=https://docs.oracle.com/javase/tutorial/uiswing/examples/events/KeyEventDemoProject/src/events/KeyEventDemo.java
     class KeyStrokeListenerWSAD implements KeyListener
     {
+        private int cycleIndex = 0;
+        @Override
         public void keyPressed(KeyEvent event) 
         {
             int dir = 0;
@@ -170,24 +197,25 @@ public class GamePanel extends BasePanel
             {
                 dir = Cycle.RIGHT;         
             }
-           // cycles.get(0).setDirection(dir);
-            System.out.println(dir);
+            cycles.get( cycleIndex ).setDirection(dir);
+            //System.out.println(dir);
         }
-
+        public void setCycleIndex( int index ) {
+            cycleIndex = index;
+        }
+        @Override
         public void keyTyped(KeyEvent event) {}
+        @Override
         public void keyReleased(KeyEvent event) {}
     }
     class KeyStrokeListenerARROWS implements KeyListener
     {
-        public KeyStrokeListenerARROWS()
-        {
-            System.out.println("Constructor");
-        }
+        private int cycleIndex = 0;
+        @Override
         public void keyPressed(KeyEvent event) 
         {
             int dir = 0;
-            System.out.println("key pressed");
-            String key = KeyStroke.getKeyStrokeForEvent(event).toString().replace("pressed ", ""); 
+             String key = KeyStroke.getKeyStrokeForEvent(event).toString().replace("pressed ", ""); 
             if (key.equals("DOWN"))
             {
                 dir = Cycle.DOWN;           
@@ -204,11 +232,16 @@ public class GamePanel extends BasePanel
             {
                 dir = Cycle.RIGHT;         
             }
-            //cycles.get(1).setDirection(dir);
-             System.out.println(dir);
+            cycles.get(cycleIndex).setDirection(dir);
+             //System.out.println(dir);
+        }
+        public void setCycleIndex( int index ) {
+            cycleIndex = index;
         }
 
+        @Override
         public void keyTyped(KeyEvent event) {}
+        @Override
         public void keyReleased(KeyEvent event) {}
 
     }
